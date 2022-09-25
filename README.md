@@ -1,5 +1,5 @@
 # 한국어 문장의 의미적 텍스트 유사도 분석 
-: KLUE-STS Benchmark Dataset을 이용하여
+*KLUE-STS Benchmark Dataset을 이용하여*
 
 ## 01 분석 정의
 
@@ -22,9 +22,10 @@
 문장 쌍은 꼬꼬마 기준 약 14개의 토큰으로 구성되며, 이는 KorSTS(kakao brain)에 비해 두 배 정도 긴 분량이다.
 의미적 유사도를 나타내는 레이블은 복수의 작업자에 의해 측정되며, 0 (상이함) <--> 5 (동등함)의 척도를 갖는다.
 
-| KLUE-STS      | Train                        | Dev                          |
-| :-----------: | :--------------------------: | :--------------------------: |
-|  Source       | Airbnb (Review), Policy (News), ParaKQC (Smart home Query) ||
-| # Examples    | 11,668                       | 519                          |
-| Avg. # tokens | 14.5                         | 14.1                         |
-[표1][Summary of KLUE-STS Datasets]
+<!--
+GitHub-Flavored Markdown의 테이블 병합 지원 불가로 이미지로 대체함. 아래 참조.
+https://github.github.com/gfm/#tables-extension-
+-->
+<img width="737" alt="스크린샷 2022-09-25 오후 11 08 10" src="https://user-images.githubusercontent.com/18377883/192147926-b9c6d1a3-9383-4014-8e5c-4b1eb063e8ac.png">
+
+---
