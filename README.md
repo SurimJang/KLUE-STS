@@ -59,19 +59,19 @@ Korean hate speech 데이터셋을 활용한 성별 편향과 혐오 발언 탐�
 
 데이터 증강 기법의 합리적 선정을 위해, 증강 과정에서 의미 유사성을 지킬 수 있는 방법인지를 중점적으로 고려하자
 
-#### :one: `EDA(Easy Data Augmentation) Random Swap`
+#### :one: EDA(Easy Data Augmentation) Random Swap
 : 문장 중 임의의 두 단어 위치를 바꾸어 문장 생성
 
 <img width="305" alt="스크린샷 2022-09-27 오후 9 14 18" src="https://user-images.githubusercontent.com/18377883/192525160-df22a72e-c515-452e-8d1a-f3c43b066bfd.png">
 
-**가설** | 한국어는 영어에 비해 <u>어순에 의미 의존</u>이 적으므로, 데이터 증강 시 모델의 예측 성능을 높일 것이다.  
-**적용** | ko-EDA (alpha=0.1, num_aug=4)  ⇒  비교군에 비해 f1 score -0.014 하락  
+`가설` | 한국어는 영어에 비해 <u>어순에 의미 의존</u>이 적으므로, 데이터 증강 시 모델의 예측 성능을 높일 것이다.  
+`적용` | ko-EDA (alpha=0.1, num_aug=4)  ⇒  비교군에 비해 f1 score -0.014 하락  
 
-#### :two: `Back Translation`
+#### :two: Back Translation
 : 타겟 언어를 타국어로 번역한 후에 다시 타겟 언어로 번역한 문장 생성
 
-**가설** | 역번역 과정에서 <u>토큰의 의미가 보존</u>되어, 데이터 증강 시 모델의 예측 성능을 높일 것이다.  
-**적용** | pororo (ko > en > ko) ⇒  비교군에 비해 f1 score  -0.16 하락  
+`가설` | 역번역 과정에서 <u>토큰의 의미가 보존</u>되어, 데이터 증강 시 모델의 예측 성능을 높일 것이다.  
+`적용` | pororo (ko > en > ko) ⇒  비교군에 비해 f1 score  -0.16 하락  
 
 * 왜 데이터증강이 효과적이지 않았는가?  
 Confusion matrix 살펴보니, 오히려 타겟 레이블이 예측을 잘 수행했음. 모델이 무얼 잘 예측할지 파악해 전략적으로 증강 기법 적용해야함.
