@@ -64,13 +64,13 @@ Korean hate speech 데이터셋을 활용한 성별 편향과 혐오 발언 탐�
 
 <img width="305" alt="스크린샷 2022-09-27 오후 9 14 18" src="https://user-images.githubusercontent.com/18377883/192525160-df22a72e-c515-452e-8d1a-f3c43b066bfd.png">
 
-`가설` | 한국어는 영어에 비해 <u>어순에 의미 의존</u>이 적으므로, 데이터 증강 시 모델의 예측 성능을 높일 것이다.  
+`가설` | 한국어는 영어에 비해 **어순에 의미 의존**이 적으므로, 데이터 증강 시 모델의 예측 성능을 높일 것이다.  
 `적용` | ko-EDA (alpha=0.1, num_aug=4)  ⇒  비교군에 비해 f1 score -0.014 하락  
 
 #### :two: Back Translation
 : 타겟 언어를 타국어로 번역한 후에 다시 타겟 언어로 번역한 문장 생성
 
-`가설` | 역번역 과정에서 <u>토큰의 의미가 보존</u>되어, 데이터 증강 시 모델의 예측 성능을 높일 것이다.  
+`가설` | 역번역 과정에서 **토큰의 의미가 보존**되어, 데이터 증강 시 모델의 예측 성능을 높일 것이다.  
 `적용` | pororo (ko > en > ko) ⇒  비교군에 비해 f1 score  -0.16 하락  
 
 * 왜 데이터증강이 효과적이지 않았는가?  
@@ -83,7 +83,7 @@ Confusion matrix 살펴보니, 오히려 타겟 레이블이 예측을 잘 수�
 
 * **Tokenizer**  
     * `Dynamic padding`  
-	 배치 별로 문장 최대 길이를 맞춰, `Fixed padding`에 비해 <u>약 30% 학습 속도 향상</u>  
+	 배치 별로 문장 최대 길이를 맞춰, Fixed padding에 비해 **약 30% 학습 속도 향상**  
 
 * **Text preprocessing**  
 앞선 언급과 같이, 학습 데이터가 이미 충분히 정제되었다 판단하여 별도의 추가적인 텍스트 정제는 수행하지 않음.  
@@ -96,7 +96,61 @@ Confusion matrix 살펴보니, 오히려 타겟 레이블이 예측을 잘 수�
     * `soyspacing` : 띄어쓰기 오류를 학습해 교정. PyKoSpacing 에 비해 가볍고 빠름  
 	           ⇒  띄어쓰기 오류와 ‘언어 패턴’은 다름. 데이터의 생성자가 상이한 조건에서는 이를 구별하기 어려움  
 
+---
+## 07 학습: 모델링 요약
 
+데이터 마다 고유한 내재적 특성이 있을 것이다. 따라서, 그 **특성을 더 효과적으로 파악하는 모델**을 찾기 위해
+단일 모델의 탐색보다 다음의 **4가지 모델 아키텍** 각각을 적용해가며 최적의 모델을 선정하는 전략을 사용
 
+[이미지]
 
+---
+## 08 학습: Sentence-Bert
+
+[이미지]
+
+#### Embedding and Training
+:one:  BERT의 입력으로 (문장 A, 문장 B)를 넣고, 평균 또는 맥스 풀링\*을 통해서 각각에 대한 문장 임베딩 벡터를 얻는다.  
+      \*`평균 풀링` [채택] : 모든 단어의 전반적인 의미를 반영  vs  `맥스 풀링`: 중요한 단어의 의미를 반영 
+:two:  생성된 두 벡터 (u, v) 의 `코사인 유사도`를 구한다.  
+:three:  해당 벡터 유사도와 레이블 유사도와의 `평균 제곱 오차`(Mean Squared Error, MSE)를 최소화하는 방식으로 학습한다.
+
+#### Objective Functions
+= {**문장 쌍 분류** o=softmax(Wt(u,v,|u−v|)), **문장 쌍 회귀** o=σ(cosine\_similarity(u,v))}
+두 Task의 목적함수를 모두 학습하거나 하나만 학습할 수 있다.
+연구 결과에 의하면, NLI Task 학습한 뒤 STS Task 학습한 SBERT의 성능이 가장 좋았으나 과제 규정에 따라 **STS만 학습**하였다.
+
+---
+## 09 결론: 모델 성과
+
+분석 대상인 KLUE-STS Datasets 토대로 총 14회의 모델링 실험을 진행
+그중 가장 높은 성과를 낸 모델은 `SentenceBert`(이하 SBERT) 기반의 학습 모델로, 
+Dev set 기준 성능은 **Pearson’ r - 88.9 / F1 score - 84.1**
+모델이 예측한 문장 유사도는 작업자가 측정한 **실제 유사도와 강한 상관관계**를 지니며, 모델은 **높은 정밀도 및 재현율**을 보였다. 
+
+[이미지]
+
+---
+## 10 결론: 더 나아갈 지점들
+
+* `더 가볍게, 더 빠르게 설계하기`  
+**정확도가 1% 낮더라도 0.1초 빨리 서빙할 수 있는 선택지를 알아야한다**
+Float point 32 bit >16 bit 변환처럼 설계상의 작은 디테일로 연산이 수월해지도록 해야한다.
+
+* `Augmentation 시야 넓히기`
+**데이터셋뿐만 아니라, 모델 아키텍쳐의 Augmentation을 고려해야한다**
+예를 들어, Sim-CSE는 Contrative Learning 수행할 때 서로 다른 random seed를 사용하여 dropout 레이어의
+랜덤성을 변경해 positive sample을 생성한다. 
+
+* `모델의 지표를 평가가 아닌 추론에도 활용하기`
+**단순히 높은 숫자를 얻으려는 것이 아닌, 데이터의 고유한 특성을 추론하려는 태도의 전환이 필요**
+도메인 데이터에 대한 분석을 진행할 때, 정량적/정성적 지표를 통해 해당 방법론을 적용하는 것에 이점이 있는지를 추론하고 개선점을 창출하는 접근이 필요하다. 
+Q. 사전학습된 모델 사용은 언제나 바람직한가? 많은 양의 데이터가 지표를 보정해주기도 하지만, Anisotropic에 빠져 과적합 문제를 피할 수 없을지 모른다.
+
+---
+## 출처
+
+최종 채택된 모델에 사용된 데이터 및 모델에 관한 출처만 표기함
+* Sungjoon Park, et al., (2021) KLUE: Korean Language Understanding Evaluation   [Link](https://arxiv.org/abs/2105.09680)
+* Reimers , et al., (2019) Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks, Association for Computational Linguistics   [Link](https://arxiv.org/abs/1908.10084)
 
