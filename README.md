@@ -3,7 +3,7 @@
 
 ## 01 분석 정의
 
-<img width="735" alt="readme1-1" src="https://user-images.githubusercontent.com/18377883/192146538-56ddd4cb-c89e-4644-9fc6-cddfc4c11391.png">
+<img width="794" alt="스크린샷 2022-11-16 오후 8 26 57" src="https://user-images.githubusercontent.com/18377883/202168554-754d3b17-e69c-4dc2-8364-72c32f6da569.png">
 
 #### `STS`(Sementic Textual Similarity): 텍스트의 `의미적 유사도`를 평가하는 NLU Task
 
