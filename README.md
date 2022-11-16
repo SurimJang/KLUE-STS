@@ -136,16 +136,16 @@ Dev set 기준 성능은 **Pearson’ r - 88.9 / F1 score - 84.1**
 <img width="1006" alt="스크린샷 2022-09-29 오후 5 45 20" src="https://user-images.githubusercontent.com/18377883/193068561-363ca09d-a712-48ae-92c3-081825efc5a3.png">
 
 ---
-## 10 결론: 더 나아갈 지점들
+## 10 회고: 더 나아갈 지점들
 
 * `더 가볍게, 더 빠르게 설계하기`  
 
-**정확도가 1% 낮더라도 0.1초 빨리 서빙할 수 있는 선택지를 알아야한다**  
+**정확도가 1% 낮더라도 0.1초 빨리 서빙할 수 있는 선택지 찾기**  
 Float point 32 bit >16 bit 변환처럼 설계상의 작은 디테일로 연산이 수월해지도록 해야한다.
 
 * `Augmentation 시야 넓히기`  
 
-**데이터셋뿐만 아니라, 모델 아키텍쳐의 Augmentation을 고려해야한다**  
+**데이터셋뿐만 아니라, 모델 아키텍쳐의 Augmentation을 고려하기**  
 예를 들어, Sim-CSE는 Contrative Learning 수행할 때 서로 다른 random seed를 사용하여 dropout 레이어의
 랜덤성을 변경해 positive sample을 생성한다. 
 
