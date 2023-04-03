@@ -106,7 +106,7 @@ Confusion matrix 살펴보니, 오히려 타겟 레이블이 예측을 잘 수�
 <img width="1108" alt="스크린샷 2022-09-29 오후 5 45 08" src="https://user-images.githubusercontent.com/18377883/193068872-e880ad7d-bec2-468f-a615-61867a215842.png">
 
 ---
-## 08 Sentence-Bert
+## 08 모델링 요약 : Sentence-Bert(채택)
 
 <img width="919" alt="스크린샷 2022-09-29 오후 5 41 41" src="https://user-images.githubusercontent.com/18377883/193068661-e36a17bf-a3c2-4ff5-9729-a57984ad7107.png">
 
